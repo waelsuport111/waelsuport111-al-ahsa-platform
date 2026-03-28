@@ -1,22 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "../../../lib/supabase";
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
-  const { error } = await supabaseAdmin
-    .from("locations")
-    .delete()
-    .eq("id", params.id);
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-
-  return NextResponse.json({ success: true });
-}
-
 export async function PATCH(
   req: Request,
   { params }: { params: { id: string } }
@@ -32,23 +16,41 @@ export async function PATCH(
       ...(body.latitude !== undefined ? { latitude: Number(body.latitude) } : {}),
       ...(body.longitude !== undefined ? { longitude: Number(body.longitude) } : {}),
       ...(body.image_url !== undefined ? { image_url: body.image_url } : {}),
+      ...(body.location_details !== undefined ? { location_details: body.location_details } : {}),
+      ...(body.tour_url !== undefined ? { tour_url: body.tour_url } : {}),
+      ...(body.contact_details !== undefined ? { contact_details: body.contact_details } : {}),
       ...(body.is_published !== undefined ? { is_published: body.is_published } : {}),
     };
 
-    const { error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin
       .from("locations")
       .update(payload)
-      .eq("id", params.id);
+      .eq("id", params.id)
+      .select()
+      .single();
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json(data);
   } catch {
-    return NextResponse.json(
-      { error: "Invalid request body" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
+}
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  const { error } = await supabaseAdmin
+    .from("locations")
+    .delete()
+    .eq("id", params.id);
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ success: true });
 }

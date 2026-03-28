@@ -3,9 +3,10 @@ import { supabaseAdmin } from "../../../lib/supabase";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await req.json();
 
     const payload = {
@@ -25,7 +26,7 @@ export async function PATCH(
     const { data, error } = await supabaseAdmin
       .from("locations")
       .update(payload)
-      .eq("id", params.id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -40,13 +41,15 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
+  _req: Request,
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
+
   const { error } = await supabaseAdmin
     .from("locations")
     .delete()
-    .eq("id", params.id);
+    .eq("id", id);
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

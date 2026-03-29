@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 const fadeUp = {
   initial: { opacity: 0, y: 36 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, amount: 0.25 },
+  viewport: { once: true, amount: 0.2 },
   transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] as const },
 };
 
@@ -17,7 +17,6 @@ const staggerContainer = {
       staggerChildren: 0.14,
     },
   },
-  viewport: { once: true, amount: 0.2 },
 };
 
 export default function HomePage() {
@@ -25,31 +24,32 @@ export default function HomePage() {
 
   return (
     <main className="bg-[#030712] text-white">
-      <section className="relative min-h-screen overflow-hidden">
+      <section className="relative overflow-hidden">
         <img
           src="/bg.jpg"
           alt="Al Ahsa"
           className="absolute inset-0 h-full w-full scale-105 object-cover opacity-35"
         />
 
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(180,140,60,0.14),transparent_30%),linear-gradient(to_bottom,rgba(2,6,23,0.42),rgba(2,6,23,0.8),rgba(2,6,23,1))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(180,140,60,0.14),transparent_30%),linear-gradient(to_bottom,rgba(2,6,23,0.42),rgba(2,6,23,0.82),rgba(2,6,23,1))]" />
 
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-[size:80px_80px] opacity-20" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:80px_80px] opacity-20" />
 
-        <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col px-6 pb-12 pt-8">
+        <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col px-5 pb-12 pt-6 md:px-6 md:pt-8">
+          {/* TOP BAR */}
           <motion.div
             initial={{ opacity: 0, y: -24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="flex items-center justify-between rounded-full border border-white/6 bg-white/[0.045] px-4 py-3 backdrop-blur-xl"
+            className="flex flex-col gap-4 rounded-[28px] border border-white/6 bg-white/[0.045] px-4 py-4 backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between"
           >
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-white/[0.07] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]" />
-              <div>
-                <p className="text-xs uppercase tracking-[0.35em] text-white/40">
+            <div className="flex min-w-0 items-center gap-3">
+              <div className="h-11 w-11 shrink-0 rounded-full bg-white/[0.07] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]" />
+              <div className="min-w-0">
+                <p className="truncate text-[11px] uppercase tracking-[0.35em] text-white/40">
                   Al Ahsa
                 </p>
-                <p className="text-sm font-medium text-white/85">
+                <p className="truncate text-sm font-medium text-white/85">
                   Immersive Platform
                 </p>
               </div>
@@ -57,35 +57,36 @@ export default function HomePage() {
 
             <button
               onClick={() => router.push("/map")}
-              className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-black transition hover:scale-[1.02] hover:bg-white/90"
+              className="self-start rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-black transition hover:scale-[1.02] hover:bg-white/90 sm:self-auto"
             >
               Open Platform
             </button>
           </motion.div>
 
-          <div className="flex flex-1 items-center">
-            <div className="grid w-full items-end gap-10 lg:grid-cols-[1.15fr_0.85fr]">
+          {/* HERO CONTENT */}
+          <div className="flex flex-1 items-center py-10 md:py-14 xl:py-16">
+            <div className="grid w-full gap-8 xl:gap-10 lg:grid-cols-[1.08fr_0.92fr]">
               <motion.div
                 initial={{ opacity: 0, y: 36 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
                 className="max-w-4xl"
               >
-                <p className="mb-5 text-[11px] uppercase tracking-[0.45em] text-[#d6c28d]">
+                <p className="mb-5 text-[11px] uppercase tracking-[0.38em] text-[#d6c28d] md:tracking-[0.45em]">
                   Vision 2030 • Smart City • Tourism • Heritage
                 </p>
 
-                <h1 className="max-w-4xl text-5xl font-semibold leading-[0.95] tracking-tight md:text-7xl xl:text-[92px]">
+                <h1 className="max-w-4xl text-[44px] font-semibold leading-[0.95] tracking-tight sm:text-[58px] md:text-[72px] xl:text-[88px] 2xl:text-[96px]">
                   Discover Al Ahsa Through a Premium Digital Experience
                 </h1>
 
-                <p className="mt-8 max-w-2xl text-base leading-8 text-white/68 md:text-lg">
+                <p className="mt-7 max-w-2xl text-base leading-8 text-white/68 md:text-lg">
                   A luxury interactive gateway that connects tourism, culture,
                   heritage, and municipal intelligence into one immersive
                   platform designed for the future of Al Ahsa.
                 </p>
 
-                <div className="mt-10 flex flex-wrap items-center gap-4">
+                <div className="mt-9 flex flex-wrap items-center gap-4">
                   <button
                     onClick={() => router.push("/map")}
                     className="rounded-full bg-white px-8 py-4 text-base font-semibold text-black transition-all duration-300 hover:scale-[1.03] hover:bg-white/90 hover:shadow-[0_0_30px_rgba(255,255,255,0.16)]"
@@ -104,11 +105,11 @@ export default function HomePage() {
                 initial="initial"
                 whileInView="whileInView"
                 viewport={{ once: true, amount: 0.2 }}
-                className="grid gap-4"
+                className="grid gap-4 self-start"
               >
                 <motion.div
                   variants={fadeUp}
-                  className="rounded-[30px] bg-white/[0.05] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-2xl"
+                  className="rounded-[28px] bg-white/[0.05] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-2xl md:p-6"
                 >
                   <p className="text-xs uppercase tracking-[0.35em] text-white/35">
                     Tourism
@@ -124,7 +125,7 @@ export default function HomePage() {
 
                 <motion.div
                   variants={fadeUp}
-                  className="rounded-[30px] bg-[linear-gradient(135deg,rgba(214,194,141,0.10),rgba(255,255,255,0.035))] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-2xl"
+                  className="rounded-[28px] bg-[linear-gradient(135deg,rgba(214,194,141,0.10),rgba(255,255,255,0.035))] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-2xl md:p-6"
                 >
                   <p className="text-xs uppercase tracking-[0.35em] text-[#d6c28d]">
                     Heritage
@@ -141,7 +142,7 @@ export default function HomePage() {
 
                 <motion.div
                   variants={fadeUp}
-                  className="rounded-[30px] bg-white/[0.05] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-2xl"
+                  className="rounded-[28px] bg-white/[0.05] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-2xl md:p-6"
                 >
                   <p className="text-xs uppercase tracking-[0.35em] text-white/35">
                     Smart City
@@ -159,16 +160,17 @@ export default function HomePage() {
             </div>
           </div>
 
+          {/* BOTTOM STATS */}
           <motion.div
             variants={staggerContainer}
             initial="initial"
             whileInView="whileInView"
             viewport={{ once: true, amount: 0.2 }}
-            className="grid gap-4 md:grid-cols-3"
+            className="grid gap-4 pt-2 md:grid-cols-3"
           >
             <motion.div
               variants={fadeUp}
-              className="rounded-[24px] bg-white/[0.04] p-5 backdrop-blur-xl shadow-[0_18px_60px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.035)]"
+              className="rounded-[22px] bg-white/[0.04] p-5 backdrop-blur-xl shadow-[0_18px_60px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.035)]"
             >
               <p className="text-xs uppercase tracking-[0.35em] text-white/35">
                 Experience
@@ -178,7 +180,7 @@ export default function HomePage() {
 
             <motion.div
               variants={fadeUp}
-              className="rounded-[24px] bg-white/[0.04] p-5 backdrop-blur-xl shadow-[0_18px_60px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.035)]"
+              className="rounded-[22px] bg-white/[0.04] p-5 backdrop-blur-xl shadow-[0_18px_60px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.035)]"
             >
               <p className="text-xs uppercase tracking-[0.35em] text-white/35">
                 Platform
@@ -190,7 +192,7 @@ export default function HomePage() {
 
             <motion.div
               variants={fadeUp}
-              className="rounded-[24px] bg-white/[0.04] p-5 backdrop-blur-xl shadow-[0_18px_60px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.035)]"
+              className="rounded-[22px] bg-white/[0.04] p-5 backdrop-blur-xl shadow-[0_18px_60px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.035)]"
             >
               <p className="text-xs uppercase tracking-[0.35em] text-white/35">
                 Direction

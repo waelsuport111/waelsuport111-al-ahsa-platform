@@ -75,6 +75,7 @@ export default function MapPage() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [search, setSearch] = useState("");
   const [showTour, setShowTour] = useState(false);
+  const [mapType, setMapType] = useState<"roadmap" | "satellite">("roadmap");
 
   useEffect(() => {
     async function fetchData() {
@@ -150,6 +151,18 @@ export default function MapPage() {
     setShowTour(false);
   };
 
+  const handleZoomIn = () => {
+    if (!mapRef.current) return;
+    const currentZoom = mapRef.current.getZoom() || 11;
+    mapRef.current.setZoom(currentZoom + 1);
+  };
+
+  const handleZoomOut = () => {
+    if (!mapRef.current) return;
+    const currentZoom = mapRef.current.getZoom() || 11;
+    mapRef.current.setZoom(currentZoom - 1);
+  };
+
   if (!isLoaded) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#081225] text-white">
@@ -164,17 +177,19 @@ export default function MapPage() {
         mapContainerStyle={containerStyle}
         center={defaultCenter}
         zoom={11}
+        mapTypeId={mapType}
         onLoad={(map) => {
           mapRef.current = map;
         }}
         onClick={closePanel}
         options={{
-          styles: darkMapStyle,
+          styles: mapType === "roadmap" ? darkMapStyle : undefined,
           disableDefaultUI: true,
-          zoomControl: true,
-          fullscreenControl: true,
+          zoomControl: false,
+          fullscreenControl: false,
           mapTypeControl: false,
           streetViewControl: false,
+          clickableIcons: false,
         }}
       >
         {filtered.map((loc) => (
@@ -197,10 +212,10 @@ export default function MapPage() {
       </GoogleMap>
 
       <div className="pointer-events-none absolute inset-x-0 top-5 z-20 flex justify-center px-4">
-        <div className="pointer-events-auto flex w-full max-w-4xl items-center gap-3 rounded-[24px] border border-white/10 bg-[#0d1728]/92 p-3 shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
+        <div className="pointer-events-auto flex w-full max-w-4xl items-center gap-3 rounded-[28px] border border-white/10 bg-[#0d1728]/88 p-3 shadow-[0_20px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
           <Link
             href="/"
-            className="shrink-0 rounded-[16px] bg-white/6 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+            className="shrink-0 rounded-[18px] border border-white/10 bg-white/6 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
           >
             Home
           </Link>
@@ -211,7 +226,7 @@ export default function MapPage() {
               placeholder="Search locations..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-[16px] border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35"
+              className="w-full rounded-[18px] border border-white/10 bg-white/5 px-5 py-3 text-sm text-white outline-none placeholder:text-white/35"
             />
           </div>
 
@@ -222,7 +237,7 @@ export default function MapPage() {
               setSelected(null);
               setShowTour(false);
             }}
-            className="rounded-[16px] border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none"
+            className="rounded-[18px] border border-white/10 bg-white/5 px-5 py-3 text-sm text-white outline-none"
           >
             {categories.map((cat) => (
               <option key={cat} value={cat} className="bg-[#0d1728]">
@@ -233,10 +248,35 @@ export default function MapPage() {
         </div>
       </div>
 
-      <aside className="absolute left-4 top-24 z-30 h-[calc(100vh-7rem)] w-[320px] overflow-y-auto rounded-[28px] border border-white/10 bg-[#0d1728]/95 p-4 shadow-[0_25px_80px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
+      <div className="absolute left-4 top-5 z-30 flex items-center rounded-[22px] border border-white/10 bg-[#0d1728]/88 p-1.5 shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
+        <button
+          onClick={() => setMapType("roadmap")}
+          className={`rounded-[16px] px-5 py-3 text-sm font-semibold transition ${
+            mapType === "roadmap"
+              ? "bg-white text-black"
+              : "text-white/70 hover:bg-white/10 hover:text-white"
+          }`}
+        >
+          Map
+        </button>
+        <button
+          onClick={() => setMapType("satellite")}
+          className={`rounded-[16px] px-5 py-3 text-sm font-semibold transition ${
+            mapType === "satellite"
+              ? "bg-white text-black"
+              : "text-white/70 hover:bg-white/10 hover:text-white"
+          }`}
+        >
+          Satellite
+        </button>
+      </div>
+
+      <aside className="absolute left-4 top-24 z-30 h-[calc(100vh-7rem)] w-[320px] overflow-y-auto rounded-[30px] border border-white/10 bg-[#071426]/90 p-4 shadow-[0_25px_80px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-white">Locations</h3>
-          <span className="rounded-full bg-white/5 px-3 py-1 text-xs text-white/60">
+          <h3 className="text-[28px] font-semibold tracking-tight text-white">
+            Locations
+          </h3>
+          <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/60">
             {filtered.length}
           </span>
         </div>
@@ -250,22 +290,20 @@ export default function MapPage() {
                   setSelected(loc);
                   setShowTour(false);
                 }}
-                className={`w-full rounded-[16px] border p-3 text-left transition ${
+                className={`w-full rounded-[18px] border p-4 text-left transition ${
                   selected?.id === loc.id
-                    ? "border-white/30 bg-white/10"
+                    ? "border-white/30 bg-white/12 shadow-[0_10px_30px_rgba(255,255,255,0.06)]"
                     : "border-white/10 bg-white/5 hover:bg-white/10"
                 }`}
               >
-                <h4 className="text-sm font-semibold text-white">
-                  {loc.title}
-                </h4>
+                <h4 className="text-sm font-semibold text-white">{loc.title}</h4>
                 <p className="mt-1 text-xs text-white/60">
                   {loc.category} • {loc.district || "Al Ahsa"}
                 </p>
               </button>
             ))
           ) : (
-            <div className="rounded-[16px] border border-white/10 bg-white/5 p-4 text-sm text-white/60">
+            <div className="rounded-[18px] border border-white/10 bg-white/5 p-4 text-sm text-white/60">
               No locations found.
             </div>
           )}
@@ -273,10 +311,10 @@ export default function MapPage() {
       </aside>
 
       {selected && (
-        <aside className="absolute right-4 top-24 z-30 h-[calc(100vh-7rem)] w-[380px] overflow-y-auto rounded-[28px] border border-white/10 bg-[#0d1728]/95 p-5 shadow-[0_25px_80px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
-          <div className="mb-4 flex items-start justify-between gap-4">
+        <aside className="absolute right-4 top-24 z-30 h-[calc(100vh-7rem)] w-[380px] overflow-y-auto rounded-[30px] border border-white/10 bg-[#071426]/90 p-6 shadow-[0_25px_80px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
+          <div className="mb-5 flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-3xl font-semibold leading-tight">
+              <h2 className="text-4xl font-semibold leading-tight tracking-tight">
                 {selected.title}
               </h2>
               <p className="mt-2 text-sm text-white/60">
@@ -286,7 +324,7 @@ export default function MapPage() {
 
             <button
               onClick={closePanel}
-              className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/70 transition hover:bg-white/10 hover:text-white"
+              className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs text-white/70 transition hover:bg-white/10 hover:text-white"
             >
               Close
             </button>
@@ -296,12 +334,12 @@ export default function MapPage() {
             <img
               src={selected.image_url}
               alt={selected.title}
-              className="mb-5 h-56 w-full rounded-[22px] object-cover"
+              className="mb-5 h-56 w-full rounded-[24px] object-cover"
             />
           )}
 
-          <div className="space-y-5">
-            <div>
+          <div className="space-y-6">
+            <div className="rounded-[22px] border border-white/10 bg-white/[0.03] p-4">
               <h3 className="mb-2 text-sm font-semibold text-white">
                 Description
               </h3>
@@ -310,7 +348,7 @@ export default function MapPage() {
               </p>
             </div>
 
-            <div>
+            <div className="rounded-[22px] border border-white/10 bg-white/[0.03] p-4">
               <h3 className="mb-2 text-sm font-semibold text-white">
                 Location Details
               </h3>
@@ -325,7 +363,7 @@ export default function MapPage() {
             <div>
               <button
                 onClick={() => setShowTour(true)}
-                className="w-full rounded-[18px] bg-white py-3 text-sm font-semibold text-black transition hover:bg-white/80"
+                className="w-full rounded-[20px] bg-white py-4 text-sm font-semibold text-black transition hover:bg-white/85"
               >
                 Explore Tour
               </button>
@@ -334,9 +372,24 @@ export default function MapPage() {
         </aside>
       )}
 
+      <div className="absolute bottom-6 right-6 z-30 flex flex-col gap-3">
+        <button
+          onClick={handleZoomIn}
+          className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-[#0d1728]/88 text-xl font-semibold text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-2xl transition hover:bg-white/10"
+        >
+          +
+        </button>
+        <button
+          onClick={handleZoomOut}
+          className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-[#0d1728]/88 text-xl font-semibold text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-2xl transition hover:bg-white/10"
+        >
+          −
+        </button>
+      </div>
+
       {showTour && selected && (
         <div className="absolute inset-0 z-50 bg-black">
-          <div className="absolute left-4 right-4 top-4 z-50 flex items-center justify-between rounded-[18px] border border-white/10 bg-black/50 px-4 py-3 backdrop-blur-xl">
+          <div className="absolute left-4 right-4 top-4 z-50 flex items-center justify-between rounded-[20px] border border-white/10 bg-black/50 px-4 py-3 backdrop-blur-xl">
             <div>
               <h3 className="text-base font-semibold text-white">
                 {selected.title}

@@ -35,8 +35,9 @@ export default function HomePage() {
 
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:80px_80px] opacity-20" />
 
+        <div className="absolute inset-0 animate-[pulse_12s_ease-in-out_infinite] bg-[radial-gradient(circle_at_30%_20%,rgba(214,194,141,0.7),transparent_40%)] opacity-[0.06]" />
+
         <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col px-5 pb-12 pt-6 md:px-6 md:pt-8">
-          {/* TOP BAR */}
           <motion.div
             initial={{ opacity: 0, y: -24 }}
             animate={{ opacity: 1, y: 0 }}
@@ -63,9 +64,8 @@ export default function HomePage() {
             </button>
           </motion.div>
 
-          {/* HERO CONTENT */}
           <div className="flex flex-1 items-center py-10 md:py-14 xl:py-16">
-            <div className="grid w-full gap-8 xl:gap-10 lg:grid-cols-[1.08fr_0.92fr]">
+            <div className="grid w-full gap-8 lg:grid-cols-[1.08fr_0.92fr] xl:gap-10">
               <motion.div
                 initial={{ opacity: 0, y: 36 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -76,7 +76,7 @@ export default function HomePage() {
                   Vision 2030 • Smart City • Tourism • Heritage
                 </p>
 
-                <h1 className="max-w-4xl text-[44px] font-semibold leading-[0.95] tracking-tight sm:text-[58px] md:text-[72px] xl:text-[88px] 2xl:text-[96px]">
+                <h1 className="max-w-4xl bg-gradient-to-b from-white via-white to-white/70 bg-clip-text text-[44px] font-semibold leading-[0.95] tracking-tight text-transparent sm:text-[58px] md:text-[72px] xl:text-[88px] 2xl:text-[96px]">
                   Discover Al Ahsa Through a Premium Digital Experience
                 </h1>
 
@@ -89,9 +89,9 @@ export default function HomePage() {
                 <div className="mt-9 flex flex-wrap items-center gap-4">
                   <button
                     onClick={() => router.push("/map")}
-                    className="rounded-full bg-white px-8 py-4 text-base font-semibold text-black transition-all duration-300 hover:scale-[1.03] hover:bg-white/90 hover:shadow-[0_0_30px_rgba(255,255,255,0.16)]"
+                    className="relative overflow-hidden rounded-full bg-white px-8 py-4 text-base font-semibold text-black transition-all duration-500 hover:scale-[1.03] hover:bg-white/90 hover:shadow-[0_0_30px_rgba(255,255,255,0.16)] before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/40 before:to-transparent before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100"
                   >
-                    Explore Interactive Map
+                    <span className="relative z-10">Explore Interactive Map</span>
                   </button>
 
                   <div className="rounded-full bg-white/[0.045] px-5 py-4 text-sm text-white/60 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
@@ -109,7 +109,7 @@ export default function HomePage() {
               >
                 <motion.div
                   variants={fadeUp}
-                  className="rounded-[28px] bg-white/[0.05] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-2xl md:p-6"
+                  className="rounded-[28px] bg-white/[0.05] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-2xl transition-all duration-500 hover:-translate-y-1 hover:bg-white/[0.07] hover:shadow-[0_30px_100px_rgba(0,0,0,0.35)] md:p-6"
                 >
                   <p className="text-xs uppercase tracking-[0.35em] text-white/35">
                     Tourism
@@ -125,7 +125,7 @@ export default function HomePage() {
 
                 <motion.div
                   variants={fadeUp}
-                  className="rounded-[28px] bg-[linear-gradient(135deg,rgba(214,194,141,0.10),rgba(255,255,255,0.035))] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-2xl md:p-6"
+                  className="rounded-[28px] bg-[linear-gradient(135deg,rgba(214,194,141,0.10),rgba(255,255,255,0.035))] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-2xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_30px_100px_rgba(0,0,0,0.35)] md:p-6"
                 >
                   <p className="text-xs uppercase tracking-[0.35em] text-[#d6c28d]">
                     Heritage
@@ -142,7 +142,7 @@ export default function HomePage() {
 
                 <motion.div
                   variants={fadeUp}
-                  className="rounded-[28px] bg-white/[0.05] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-2xl md:p-6"
+                  className="rounded-[28px] bg-white/[0.05] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-2xl transition-all duration-500 hover:-translate-y-1 hover:bg-white/[0.07] hover:shadow-[0_30px_100px_rgba(0,0,0,0.35)] md:p-6"
                 >
                   <p className="text-xs uppercase tracking-[0.35em] text-white/35">
                     Smart City
@@ -160,7 +160,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* BOTTOM STATS */}
           <motion.div
             variants={staggerContainer}
             initial="initial"
@@ -170,7 +169,7 @@ export default function HomePage() {
           >
             <motion.div
               variants={fadeUp}
-              className="rounded-[22px] bg-white/[0.04] p-5 backdrop-blur-xl shadow-[0_18px_60px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.035)]"
+              className="rounded-[22px] bg-white/[0.04] p-5 shadow-[0_18px_60px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.035)] backdrop-blur-xl"
             >
               <p className="text-xs uppercase tracking-[0.35em] text-white/35">
                 Experience
@@ -180,7 +179,7 @@ export default function HomePage() {
 
             <motion.div
               variants={fadeUp}
-              className="rounded-[22px] bg-white/[0.04] p-5 backdrop-blur-xl shadow-[0_18px_60px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.035)]"
+              className="rounded-[22px] bg-white/[0.04] p-5 shadow-[0_18px_60px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.035)] backdrop-blur-xl"
             >
               <p className="text-xs uppercase tracking-[0.35em] text-white/35">
                 Platform
@@ -192,7 +191,7 @@ export default function HomePage() {
 
             <motion.div
               variants={fadeUp}
-              className="rounded-[22px] bg-white/[0.04] p-5 backdrop-blur-xl shadow-[0_18px_60px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.035)]"
+              className="rounded-[22px] bg-white/[0.04] p-5 shadow-[0_18px_60px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.035)] backdrop-blur-xl"
             >
               <p className="text-xs uppercase tracking-[0.35em] text-white/35">
                 Direction

@@ -173,7 +173,7 @@ export default function MapPage() {
           disableDefaultUI: true,
           zoomControl: true,
           fullscreenControl: true,
-          mapTypeControl: true,
+          mapTypeControl: false,
           streetViewControl: false,
         }}
       >

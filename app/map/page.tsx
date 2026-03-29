@@ -212,13 +212,36 @@ export default function MapPage() {
       </GoogleMap>
 
       <div className="pointer-events-none absolute inset-x-0 top-5 z-20 flex justify-center px-4">
-        <div className="pointer-events-auto flex w-full max-w-4xl items-center gap-3 rounded-[28px] border border-white/10 bg-[#0d1728]/88 p-3 shadow-[0_20px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
+        <div className="pointer-events-auto flex w-full max-w-5xl items-center gap-3 rounded-[28px] border border-white/10 bg-[#0d1728]/88 p-3 shadow-[0_20px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
           <Link
             href="/"
             className="shrink-0 rounded-[18px] border border-white/10 bg-white/6 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
           >
             Home
           </Link>
+
+          <div className="flex shrink-0 items-center rounded-[18px] border border-white/10 bg-white/5 p-1">
+            <button
+              onClick={() => setMapType("roadmap")}
+              className={`rounded-[14px] px-4 py-2.5 text-sm font-semibold transition ${
+                mapType === "roadmap"
+                  ? "bg-white text-black"
+                  : "text-white/70 hover:bg-white/10 hover:text-white"
+              }`}
+            >
+              Map
+            </button>
+            <button
+              onClick={() => setMapType("satellite")}
+              className={`rounded-[14px] px-4 py-2.5 text-sm font-semibold transition ${
+                mapType === "satellite"
+                  ? "bg-white text-black"
+                  : "text-white/70 hover:bg-white/10 hover:text-white"
+              }`}
+            >
+              Satellite
+            </button>
+          </div>
 
           <div className="flex-1">
             <input
@@ -248,29 +271,6 @@ export default function MapPage() {
         </div>
       </div>
 
-      <div className="absolute left-4 top-5 z-30 flex items-center rounded-[22px] border border-white/10 bg-[#0d1728]/88 p-1.5 shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
-        <button
-          onClick={() => setMapType("roadmap")}
-          className={`rounded-[16px] px-5 py-3 text-sm font-semibold transition ${
-            mapType === "roadmap"
-              ? "bg-white text-black"
-              : "text-white/70 hover:bg-white/10 hover:text-white"
-          }`}
-        >
-          Map
-        </button>
-        <button
-          onClick={() => setMapType("satellite")}
-          className={`rounded-[16px] px-5 py-3 text-sm font-semibold transition ${
-            mapType === "satellite"
-              ? "bg-white text-black"
-              : "text-white/70 hover:bg-white/10 hover:text-white"
-          }`}
-        >
-          Satellite
-        </button>
-      </div>
-
       <aside className="absolute left-4 top-24 z-30 h-[calc(100vh-7rem)] w-[320px] overflow-y-auto rounded-[30px] border border-white/10 bg-[#071426]/90 p-4 shadow-[0_25px_80px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-[28px] font-semibold tracking-tight text-white">
@@ -292,7 +292,7 @@ export default function MapPage() {
                 }}
                 className={`w-full rounded-[18px] border p-4 text-left transition ${
                   selected?.id === loc.id
-                    ? "border-white/30 bg-white/12 shadow-[0_10px_30px_rgba(255,255,255,0.06)]"
+                    ? "border-white/30 bg-white/10 shadow-[0_10px_30px_rgba(255,255,255,0.06)]"
                     : "border-white/10 bg-white/5 hover:bg-white/10"
                 }`}
               >

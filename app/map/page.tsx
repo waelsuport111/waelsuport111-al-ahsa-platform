@@ -13,6 +13,7 @@ type LocationItem = {
   latitude: number;
   longitude: number;
   image_url?: string;
+  tour_url?: string;
 };
 
 const containerStyle = {
@@ -73,6 +74,7 @@ export default function MapPage() {
   const [selected, setSelected] = useState<LocationItem | null>(null);
   const [activeCategory, setActiveCategory] = useState("All");
   const [search, setSearch] = useState("");
+  const [showTour, setShowTour] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -143,7 +145,10 @@ export default function MapPage() {
     mapRef.current.setZoom(15);
   }, [selected]);
 
-  const closePanel = () => setSelected(null);
+  const closePanel = () => {
+    setSelected(null);
+    setShowTour(false);
+  };
 
   if (!isLoaded) {
     return (
@@ -176,7 +181,10 @@ export default function MapPage() {
           <Marker
             key={loc.id}
             position={{ lat: loc.latitude, lng: loc.longitude }}
-            onClick={() => setSelected(loc)}
+            onClick={() => {
+              setSelected(loc);
+              setShowTour(false);
+            }}
             icon={
               selected?.id === loc.id
                 ? {
@@ -212,6 +220,7 @@ export default function MapPage() {
             onChange={(e) => {
               setActiveCategory(e.target.value);
               setSelected(null);
+              setShowTour(false);
             }}
             className="rounded-[16px] border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none"
           >
@@ -223,6 +232,45 @@ export default function MapPage() {
           </select>
         </div>
       </div>
+
+      <aside className="absolute left-4 top-24 z-30 h-[calc(100vh-7rem)] w-[320px] overflow-y-auto rounded-[28px] border border-white/10 bg-[#0d1728]/95 p-4 shadow-[0_25px_80px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-white">Locations</h3>
+          <span className="rounded-full bg-white/5 px-3 py-1 text-xs text-white/60">
+            {filtered.length}
+          </span>
+        </div>
+
+        <div className="space-y-3">
+          {filtered.length > 0 ? (
+            filtered.map((loc) => (
+              <button
+                key={loc.id}
+                onClick={() => {
+                  setSelected(loc);
+                  setShowTour(false);
+                }}
+                className={`w-full rounded-[16px] border p-3 text-left transition ${
+                  selected?.id === loc.id
+                    ? "border-white/30 bg-white/10"
+                    : "border-white/10 bg-white/5 hover:bg-white/10"
+                }`}
+              >
+                <h4 className="text-sm font-semibold text-white">
+                  {loc.title}
+                </h4>
+                <p className="mt-1 text-xs text-white/60">
+                  {loc.category} • {loc.district || "Al Ahsa"}
+                </p>
+              </button>
+            ))
+          ) : (
+            <div className="rounded-[16px] border border-white/10 bg-white/5 p-4 text-sm text-white/60">
+              No locations found.
+            </div>
+          )}
+        </div>
+      </aside>
 
       {selected && (
         <aside className="absolute right-4 top-24 z-30 h-[calc(100vh-7rem)] w-[380px] overflow-y-auto rounded-[28px] border border-white/10 bg-[#0d1728]/95 p-5 shadow-[0_25px_80px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
@@ -273,8 +321,54 @@ export default function MapPage() {
                 Coordinates: {selected.latitude}, {selected.longitude}
               </p>
             </div>
+
+            <div>
+              <button
+                onClick={() => setShowTour(true)}
+                className="w-full rounded-[18px] bg-white py-3 text-sm font-semibold text-black transition hover:bg-white/80"
+              >
+                Explore Tour
+              </button>
+            </div>
           </div>
         </aside>
+      )}
+
+      {showTour && selected && (
+        <div className="absolute inset-0 z-50 bg-black">
+          <div className="absolute left-4 right-4 top-4 z-50 flex items-center justify-between rounded-[18px] border border-white/10 bg-black/50 px-4 py-3 backdrop-blur-xl">
+            <div>
+              <h3 className="text-base font-semibold text-white">
+                {selected.title}
+              </h3>
+              <p className="text-xs text-white/60">Immersive Tour View</p>
+            </div>
+
+            <button
+              onClick={() => setShowTour(false)}
+              className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black"
+            >
+              Close Tour
+            </button>
+          </div>
+
+          {selected.tour_url ? (
+            <iframe
+              src={selected.tour_url}
+              className="h-full w-full"
+              allowFullScreen
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-[#081225] px-6 text-center text-white">
+              <div>
+                <h3 className="text-2xl font-semibold">Tour not available yet</h3>
+                <p className="mt-3 text-sm text-white/65">
+                  Add a tour URL for this location from the dashboard later.
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
       )}
     </main>
   );

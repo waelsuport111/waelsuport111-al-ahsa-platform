@@ -36,12 +36,10 @@ const emptyForm = {
 export default function DashboardPage() {
   const [locations, setLocations] = useState<LocationItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState(emptyForm);
 
   async function loadLocations() {
     try {
-      setLoading(true);
       const response = await fetch("/api/locations", { cache: "no-store" });
       const data: LocationItem[] = await response.json();
       setLocations(data);
@@ -64,55 +62,45 @@ export default function DashboardPage() {
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
 
-    try {
-      setSubmitting(true);
+    const payload = {
+      title: form.title,
+      category: form.category,
+      description: form.description,
+      district: form.district,
+      latitude: Number(form.latitude),
+      longitude: Number(form.longitude),
+      locationDetails: form.locationDetails,
+      contactLabel: form.contactLabel,
+      contactValue: form.contactValue,
+      tourUrl: form.tourUrl,
+      images: form.imagesText
+        .split("\n")
+        .map((item) => item.trim())
+        .filter(Boolean),
+      isPublished: form.isPublished,
+    };
 
-      const payload = {
-        title: form.title,
-        category: form.category,
-        description: form.description,
-        district: form.district,
-        latitude: Number(form.latitude),
-        longitude: Number(form.longitude),
-        locationDetails: form.locationDetails,
-        contactLabel: form.contactLabel,
-        contactValue: form.contactValue,
-        tourUrl: form.tourUrl,
-        images: form.imagesText
-          .split("\n")
-          .map((item) => item.trim())
-          .filter(Boolean),
-        isPublished: form.isPublished,
-      };
+    const response = await fetch("/api/locations", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
-      const response = await fetch("/api/locations", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        alert("Failed to create location");
-        return;
-      }
-
-      setForm(emptyForm);
-      await loadLocations();
-      alert("Location created successfully");
-    } catch (error) {
-      console.error(error);
-      alert("Something went wrong");
-    } finally {
-      setSubmitting(false);
+    if (!response.ok) {
+      alert("Failed to create location");
+      return;
     }
+
+    setForm(emptyForm);
+    await loadLocations();
   }
 
   return (
     <main className="min-h-screen bg-[#050816] px-6 py-8 text-white">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(11,17,31,0.92)_0%,rgba(8,12,24,0.86)_100%)] p-6 shadow-[0_25px_80px_rgba(0,0,0,0.45)]">
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-xs tracking-[0.24em] text-white/40 uppercase">
               Private CMS
@@ -120,9 +108,6 @@ export default function DashboardPage() {
             <h1 className="mt-2 text-4xl font-semibold tracking-[-0.04em]">
               Al Ahsa Dashboard
             </h1>
-            <p className="mt-2 text-sm text-white/60">
-              This dashboard now uses the same API as the public map.
-            </p>
           </div>
 
           <div className="rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm text-white/75">
@@ -253,22 +238,23 @@ export default function DashboardPage() {
 
               <button
                 type="submit"
-                disabled={submitting}
-                className="w-full rounded-full bg-[#d6b36a] px-5 py-3 text-sm font-semibold tracking-[0.14em] text-black uppercase transition hover:scale-[1.01] disabled:opacity-60"
+                className="w-full rounded-full bg-[#d6b36a] px-5 py-3 text-sm font-semibold tracking-[0.14em] text-black uppercase transition hover:scale-[1.01]"
               >
-                {submitting ? "Creating..." : "Create Location"}
+                Create Location
               </button>
             </form>
           </section>
 
           <section className="rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(11,17,31,0.92)_0%,rgba(8,12,24,0.86)_100%)] p-5 shadow-[0_25px_80px_rgba(0,0,0,0.45)]">
-            <div className="mb-5">
-              <p className="text-xs tracking-[0.22em] text-white/40 uppercase">
-                Locations
-              </p>
-              <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">
-                Current published destinations
-              </h2>
+            <div className="mb-5 flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs tracking-[0.22em] text-white/40 uppercase">
+                  Locations
+                </p>
+                <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">
+                  Current published destinations
+                </h2>
+              </div>
             </div>
 
             {loading ? (

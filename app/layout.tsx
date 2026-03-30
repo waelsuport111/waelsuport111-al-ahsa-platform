@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Al Ahsa",
-  description: "Premium interactive destination platform for Al Ahsa",
+  title: "Al Ahsa Platform",
+  description: "Premium interactive spatial platform for Al Ahsa",
 };
 
 export default function RootLayout({
@@ -23,8 +23,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body>{children}</body>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    >
+      <body className="min-h-full bg-[#050811] text-white">{children}</body>
     </html>
   );
 }
